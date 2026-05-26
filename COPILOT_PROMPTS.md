@@ -1,0 +1,1 @@
+I did not use Copilot or any other AI tool during this lab

@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.time.Instant;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 public class AddStudent {
     private static final String URL = "jdbc:h2:./data/studentdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE";
@@ -7,6 +9,9 @@ public class AddStudent {
     private static final String PASS = "secret";
 
     public static void main(String[] args) throws Exception{
+
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(System.out, true, StandardCharsets.UTF_8));
 
         String name = args[0].trim();
         if (name.isEmpty() || name.length() > 80) {

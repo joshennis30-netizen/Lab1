@@ -9,9 +9,12 @@ public class AddStudent {
     private static final String PASS = "secret";
 
     public static void main(String[] args) throws Exception{
+        DriverManager.setLoginTimeout(5);
 
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
         System.setErr(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+
+        String sql = "INSERT INTO student (name, program, gpa) VALUES (?, ?, ?)";
 
         String name = args[0].trim();
         if (name.isEmpty() || name.length() > 80) {
@@ -38,7 +41,7 @@ public class AddStudent {
         }
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement ps = conn.prepareStatement("INSERT INTO student (name, program, gpa) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setQueryTimeout(10);
             ps.setString(1, name);
             ps.setString(2, program);

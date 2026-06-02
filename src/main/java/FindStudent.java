@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.time.Instant;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 public class FindStudent {
     private static final String URL = "jdbc:h2:./data/studentdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE";
@@ -7,6 +9,12 @@ public class FindStudent {
     private static final String PASS = "secret";
 
     public static void main(String[] args) throws Exception {
+        DriverManager.setLoginTimeout(5);
+
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+
+        String sql = "SELECT id, name, program, gpa FROM student WHERE id = ?";
 
         int theId = 0;
         try {
@@ -16,7 +24,7 @@ public class FindStudent {
             System.exit(1);
         }
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
-             PreparedStatement ps = conn.prepareStatement("SELECT id, name, program, gpa FROM student WHERE id = ?")) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setQueryTimeout(10);
             ps.setInt(1, theId);
             try (ResultSet rs = ps.executeQuery()) {

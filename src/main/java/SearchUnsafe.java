@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 public class SearchUnsafe {
     private static final String URL = "jdbc:h2:./data/studentdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE";
@@ -6,6 +8,11 @@ public class SearchUnsafe {
     private static final String PASS = "secret";
 
     public static void main(String[] args) throws Exception{
+        DriverManager.setLoginTimeout(5);
+
+        System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+        System.setErr(new PrintStream(System.out, true, StandardCharsets.UTF_8));
+
         String sql = "SELECT id, name, program, gpa FROM student WHERE name LIKE '%" + args[0] + "%'";
 
         try (Connection conn = DriverManager.getConnection(URL, USER, PASS);
